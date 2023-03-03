@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: base-client-deployment
+  labels:
+    app: base-client
+spec:
+  selector:
+    matchLabels:
+      app: base-client
+  template:
+    metadata:
+      labels:
+        app: base-client
+    spec:
+      containers:
+        - name: app
+          image: ghcr.io/mmeendez8/grpc_vs_rest_base_client:latest
+          # Examples of http and grpc urls:
+          # http://my-url:8080
+          # my-url:7070
+          args: [HTTP_URL, GRPC_URL]
+          resources:
+            limits:
+              memory: 2Gi
+            requests:
+              memory: 1Gi

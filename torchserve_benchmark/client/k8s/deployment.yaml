@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: torchserve-client-deployment
+  labels:
+    app: torchserve-client
+spec:
+  selector:
+    matchLabels:
+      app: torchserve-client
+  template:
+    metadata:
+      labels:
+        app: torchserve-client
+    spec:
+      containers:
+        - name: app
+          image: ghcr.io/mmeendez8/grpc_vs_rest_torchserve_client:latest
+          # Examples of http and grpc urls:
+          # http://my-url
+          # my-url:50051
+          args: [HTTP_URL, GRPC_URL]
+          resources:
+            limits:
+              memory: 2Gi
+            requests:
+              memory: 1Gi

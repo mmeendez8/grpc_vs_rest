@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rest-base-server-deployment
+  labels: 
+    app: rest-base-server
+spec:
+  selector:
+    matchLabels:
+      app: rest-base-server
+  template:
+    metadata:
+      labels:
+        app: rest-base-server
+    spec:
+      containers:
+        - name: app
+          image: ghcr.io/mmeendez8/grpc_vs_rest_base_rest:latest
+          ports:
+            - name: rest-inference
+              containerPort: 80
+          resources:
+            limits:
+              memory: 1Gi
+              cpu: 500m
+            requests:
+              memory: 200Mi
+              cpu: 250m
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: rest-base-server-service
+spec:
+  selector:
+    app: rest-base-server
+  ports:
+    - name: rest-inference
+      port: 80
+      protocol: TCP
+      targetPort: rest-inference
+  clusterIP: None

@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: torchserve-deployment
+  labels: 
+    app: torchserve
+spec:
+  selector:
+    matchLabels:
+      app: torchserve
+  template:
+    metadata:
+      labels:
+        app: torchserve
+    spec:
+      containers:
+        - name: app
+          image: pytorch/torchserve:latest-gpu
+          ports:
+            - name: http-inference
+              containerPort: 8080
+            - name: http-management
+              containerPort: 8081
+            - name: grpc-inference
+              containerPort: 7070
+          resources:
+            limits:
+              memory: 6Gi
+              nvidia.com/gpu: "1"
+              cpu: 3000m
+            requests:
+              memory: 2Gi
+              nvidia.com/gpu: "1"
+              cpu: 1000m
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: torchserve-service
+spec:
+  selector:
+    app: torchserve
+  ports:
+    - name: http-inference
+      port: 8080
+      protocol: TCP
+      targetPort: http-inference
+    - name: http-management
+      port: 8081
+      protocol: TCP
+      targetPort: http-inference
+    - name: grpc-inference
+      port: 7070
+      protocol: TCP
+      targetPort: grpc-inference
+  clusterIP: None
+

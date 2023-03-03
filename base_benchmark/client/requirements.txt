@@ -1,0 +1,6 @@
+grpcio
+protobuf
+grpcio-tools
+opencv-python
+numpy
+httpx

@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grpc-base-server-deployment
+  labels: 
+    app: grpc-base-server
+spec:
+  selector:
+    matchLabels:
+      app: grpc-base-server
+  template:
+    metadata:
+      labels:
+        app: grpc-base-server
+    spec:
+      containers:
+        - name: app
+          image: ghcr.io/mmeendez8/grpc_vs_rest_base_grpc:latest
+          ports:
+            - name: grpc-inference
+              containerPort: 50051
+          resources:
+            limits:
+              memory: 1Gi
+              cpu: 500m
+            requests:
+              memory: 200Mi
+              cpu: 250m
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: grpc-base-server-service
+spec:
+  selector:
+    app: grpc-base-server
+  ports:
+    - name: grpc-inference
+      port: 50051
+      protocol: TCP
+      targetPort: grpc-inference
+  clusterIP: None
+

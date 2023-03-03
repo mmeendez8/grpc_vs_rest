@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package ai.statsbomb.com;
+
+option java_multiple_files = true;
+
+
+message BasicRequest {
+  // Basic request to compare with a standard JSON request
+  string field1 = 1;
+  string field2 = 2;
+  int32 field3 = 3;
+  map<string, int32> field4 = 4;
+}
+
+message ImageBase64Request {
+  // Image as base64
+  string image = 1;
+}
+
+message ImageBinaryRequest {
+  // Image as bytes
+  bytes image = 1;
+}
+
+message BasicResponse {
+  // Response content for prediction
+  repeated float prediction1 = 1;
+
+  map<string, int32> prediction2 = 2;
+}
+
+service GrpcBenchmarkApiService {
+
+  rpc BenchmarkBasicRequest(BasicRequest) returns (BasicResponse) {}
+
+  rpc BenchmarkB64Image(ImageBase64Request) returns (BasicResponse) {}
+
+  rpc BenchmarkBinaryImage(ImageBinaryRequest) returns (BasicResponse) {}
+}
